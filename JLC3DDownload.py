@@ -46,7 +46,15 @@ def default_desktop():
 # 嘉立创 API 逻辑
 # =====================================================
 BASE_API = "https://pro.lceda.cn/api"
-HEADERS = {"User-Agent": "Mozilla/5.0"}
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/json, text/javascript, */*; q=0.01",
+    "Referer": "https://pro.lceda.cn/",
+}
 
 
 def search_product(code):
@@ -230,7 +238,8 @@ class JLC3DApp(tk.Tk):
             self.last_download_file = filepath
             self.after(0, lambda: self.log_msg(f"下载完成 ✔\n保存至：{filepath}"))
         except Exception as e:
-            self.after(0, lambda: self.log_msg(f"错误：{e}"))
+            err_text = f"{type(e).__name__}: {e}" if str(e) else type(e).__name__
+            self.after(0, lambda msg=err_text: self.log_msg(f"错误：{msg}"))
         finally:
             self.after(0, lambda: self.btn_download.config(state="normal", bg="#28a745", text="立即下载"))
 
